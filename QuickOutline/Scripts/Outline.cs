@@ -48,6 +48,16 @@ public class Outline : MonoBehaviour {
     }
   }
 
+  public int SortingLayer
+  {
+    get { return sortingLayer; }
+    set
+    {
+      sortingLayer = value;
+      needsUpdate = true;
+    }
+  }
+
   [Serializable]
   private class ListVector3 {
     public List<Vector3> data;
@@ -61,6 +71,9 @@ public class Outline : MonoBehaviour {
 
   [SerializeField, Range(0f, 10f)]
   private float outlineWidth = 2f;
+
+  [SerializeField]
+  private int sortingLayer;
 
   [Header("Optional")]
 
@@ -273,6 +286,12 @@ public class Outline : MonoBehaviour {
 
     // Apply properties according to mode
     outlineFillMaterial.SetColor("_OutlineColor", outlineColor);
+
+    outlineFillMaterial.SetFloat("_ZRef", sortingLayer + 1);
+    outlineMaskMaterial.SetFloat("_ZRef", sortingLayer + 1);
+
+    outlineMaskMaterial.renderQueue = 3100 + 20 * sortingLayer;
+    outlineFillMaterial.renderQueue = 3110 + 20 * sortingLayer;
 
     switch (outlineMode) {
       case Mode.OutlineAll:

@@ -8,7 +8,8 @@
 
 Shader "Custom/Outline Mask" {
   Properties {
-    [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
+    [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0    
+    _ZRef("ZRef", Float) = 1
   }
 
   SubShader {
@@ -24,8 +25,8 @@ Shader "Custom/Outline Mask" {
       ZWrite Off
       ColorMask 0
 
-      Stencil {
-        Ref 1
+      Stencil {        
+        Ref [_ZRef]
         Pass Replace
       }
     }
